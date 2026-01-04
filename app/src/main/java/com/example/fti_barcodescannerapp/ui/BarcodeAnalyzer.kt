@@ -1,4 +1,4 @@
-package com.example.fti_barcodescannerapp
+package com.example.fti_barcodescannerapp.ui
 
 import android.annotation.SuppressLint
 import android.graphics.ImageFormat
@@ -10,13 +10,13 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 
-class BarcodeAnalyzer(
+class BarcodeAnalyzer( //CameraX opens the camera, shows preview in PreviewView, every frame to ImageAnalysis.Analyzer
     private val onBarcodeDetected: (List<Barcode>) -> Unit
 ) : ImageAnalysis.Analyzer {
 
     private val options = BarcodeScannerOptions.Builder()
         .setBarcodeFormats(
-            Barcode.FORMAT_ALL_FORMATS // Tell ML Kit which to detect
+            Barcode.FORMAT_ALL_FORMATS // Tell ML Kit which to detect - QR, Code128, EAN, UPC, etc. (FORMAT_QR_CODE)
         )
         .build()
 
@@ -38,11 +38,11 @@ class BarcodeAnalyzer(
         }
 
         val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-        val image = InputImage.fromMediaImage(mediaImage, rotationDegrees)
+        val image = InputImage.fromMediaImage(mediaImage, rotationDegrees) //ML kit handels rotation, mirroring, prespective correction... where is being extracted in overrride
         //bridge between CameraX and ML Kit... knows image bugger, orientation, lens behaviour
 
-        scanner.process(image) //run barcode detection (detect edges, correct prespective, structured results)
-            .addOnSuccessListener { barcodes -> //List<Barcode> and each barcode containts rawValue, boundingBox, format
+        scanner.process(image) //run barcode detection, scans frame (detect edges, correct prespective, decoding, error, structured results)
+            .addOnSuccessListener { barcodes -> //List<Barcode> and each barcode contains rawValue, boundingBox, format, valueType
                 if (barcodes.isNotEmpty()) {
                     onBarcodeDetected(barcodes)
                 }
