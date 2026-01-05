@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,6 +9,7 @@
     <!-- APP BAR -->
     <!-- ===================== -->
     <com.google.android.material.appbar.AppBarLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,43 +17,56 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
             android:title="@string/app_name"
             android:titleTextColor="@android:color/white"
-            android:background="?attr/colorPrimary"
-            app:titleCentered="false"
-            android:paddingTop="15dp"
-            app:menu="@menu/menu_main" />
+            app:menu="@menu/menu_main"
+            app:titleCentered="false" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- ===================== -->
     <!-- CONTENT -->
     <!-- ===================== -->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- CAMERA PREVIEW (MOST SPACE) -->
-        <androidx.camera.view.PreviewView
-            android:id="@+id/previewView"
+        <!-- ===================== -->
+        <!-- CAMERA + OVERLAY -->
+        <!-- ===================== -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:scaleType="fitCenter" />
+            android:layout_weight="1">
 
-        <!-- BOTTOM TEXT (ALWAYS VISIBLE) -->
+            <!-- CAMERA PREVIEW (MOST SPACE) -->
+            <androidx.camera.view.PreviewView
+                android:id="@+id/previewView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter" />
+
+            <!-- Camera Overlay -->
+            <com.example.fti_barcodescannerapp.ui.CameraOverlayView
+                android:id="@+id/cameraOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="MissingClass" />
+        </FrameLayout>
+
         <TextView
             android:id="@+id/txtResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center"
             android:padding="16dp"
             android:text="@string/scan_hint"
+            android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@color/black"
-            android:textColor="@color/white" />
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
